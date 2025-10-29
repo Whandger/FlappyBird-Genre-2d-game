@@ -119,29 +119,35 @@ function updateObstacles() {
     
     obstacleTop.style.left = obstacleX + "px" // Vai puxando o obstaculo do topo
     obstacleBottom.style.left = obstacleX + "px" // Vai puxando o obstaculo de baixo
-
-    if (obstacleX <= -90) { //se o obstaculo passar -90 do eixo X
+    
+    if (obstacleX <= -300) { //se o obstaculo passar -60 do eixo X
         restartObject(); 
       }
 }
 
 function restartObject() {
-    obstacleX = window.innerWidth + 350; // faz com que o X do obstaculo comece 350px após a borda da janela
-    
-    let alturaCano = Math.floor(Math.random() * (400 - 100 + 1)) + 100; //a altura do cano é gerada aleatoriamente
-    let gap = -500; // espaço pro pássaro passar
-
-    obstacleTop.style.height = alturaCano + "px"; //define a altura do cano de cima com o valor aleatorio
-    obstacleBottom.style.height = (900 - alturaCano + gap) + "px"; // define a altura do cano de baixo sendo 900 base - a altura do cano + o espaço pro passaro passar
-
-    obstaclePassed = false; // ✅ reseta a flag do score
-
-    // Adia a liberação do updateScore para o próximo frame
+    obstacleX = window.innerWidth + 450; // começa fora da tela
+  
+    const screenHeight = window.innerHeight; // altura da tela atual
+    const gapSize = screenHeight * 0.25; // espaço entre os canos = 25% da tela
+    const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
+    const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
+  
+    // gera uma altura aleatória dentro do intervalo
+    let alturaCano = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+  
+    // aplica as alturas dinamicamente
+    obstacleTop.style.height = alturaCano + "px";
+    obstacleBottom.style.height = (screenHeight - alturaCano - gapSize) + "px";
+  
+    obstaclePassed = false;
     obstacleJustReset = true;
+  
     setTimeout(() => {
-        obstacleJustReset = false;
-    }, 5); // Em quantos frames ocorre a limitação para conseguir outro ponto
-}
+      obstacleJustReset = false;
+    }, 5);
+  }
+  
 
 function colission() {
     const birdRect = flapBird.getBoundingClientRect();
@@ -217,5 +223,4 @@ function restartGame() {
     // Reinicia
     start();
 }
-
   
