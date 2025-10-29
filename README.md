@@ -84,7 +84,7 @@ Built purely with HTML, CSS, and JavaScript for learning and fun.
 
 ## 🖼️ Preview
 
-![Flappy Bird Clone Screenshot](./img/preview.png)
+![Flappy Bird Clone Screenshot](./images/flapbird_print_image_for_preview.png)
 
 ---
 
