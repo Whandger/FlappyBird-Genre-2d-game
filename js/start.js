@@ -22,6 +22,7 @@ let obstacleSpeed = 0; // velocidade do obstaculo
 let score = 0;
 let scoreSound = new Audio('./sound/audio_score.mp3');
 let obstaclePassed = false;
+let obstacleJustReset = false;
 // Game
 let gameInterval;
 let isGameRunning = false; // Vê se o jogo esta rodando 
@@ -120,9 +121,14 @@ function updateObstacles() {
     obstacleTop.style.left = obstacleX + "px" // Vai puxando o obstaculo do topo
     obstacleBottom.style.left = obstacleX + "px" // Vai puxando o obstaculo de baixo
     
-    if (obstacleX <= -300) { //se o obstaculo passar -60 do eixo X
-        restartObject(); 
-      }
+    const gameBox = document.querySelector('.box'); // pega só o primeiro elemento com a classe 'box'
+    const obstacleRect = obstacleTop.getBoundingClientRect();
+    const boxRect = gameBox.getBoundingClientRect();
+    
+    // Se o obstáculo passou totalmente da tela
+    if (obstacleRect.right < boxRect.left) {
+      restartObject();
+    }
 }
 
 function restartObject() {
@@ -169,13 +175,11 @@ function colission() {
 function updateScore() {
     const birdRect = flapBird.getBoundingClientRect();
     const topRect = obstacleTop.getBoundingClientRect();
-    const scoreNumber = document.getElementById('scoreNumber');
 
     // Se acabou de reiniciar, ignora este frame
     if (obstacleJustReset) return;
 
     if (!obstaclePassed && birdRect.left > topRect.right) {
-      console.log("Contou ponto - obstacleX:", obstacleX);
       obstaclePassed = true;
       score++;  
       scoreSound.play();
@@ -216,7 +220,8 @@ function restartGame() {
     obstacleGravity = 0.01;
     obstacleSpeed = 0;
     obstacleX = window.innerWidth + 0;
-    backgroundX = 0;
+    bg1X = 0;
+    bg2X = window.innerWidth;
     score = 0;
     scoreNumber.innerHTML = score;
 
