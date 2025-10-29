@@ -39,23 +39,6 @@ Handles all the game logic:
 
 ---
 
-## 🗂️ Project Structure
-│
-├── index.html
-├── css/
-│ └── style.css
-├── js/
-│ └── start.js
-├── img/
-│ └── (backgrounds, bird, obstacles, etc.)
-├── sound/
-│ ├── audio_jump.mp3
-│ └── audio_score.mp3
-└── README.md
-
-
----
-
 ## 🚀 How to Play
 
 1. Open the game via GitHub Pages or run `index.html` locally.  
