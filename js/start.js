@@ -120,7 +120,7 @@ function updateObstacles() {
     obstacleTop.style.left = obstacleX + "px" // Vai puxando o obstaculo do topo
     obstacleBottom.style.left = obstacleX + "px" // Vai puxando o obstaculo de baixo
 
-    if (obstacleX <= -90) { //se o obstaculo passar -60 do eixo X
+    if (obstacleX <= -90) { //se o obstaculo passar -90 do eixo X
         restartObject(); 
       }
 }
@@ -217,4 +217,5 @@ function restartGame() {
     // Reinicia
     start();
 }
+
   
