@@ -40,4 +40,53 @@ Handles all the game logic:
 ---
 
 ## 🗂️ Project Structure
+│
+├── index.html
+├── css/
+│ └── style.css
+├── js/
+│ └── start.js
+├── img/
+│ └── (backgrounds, bird, obstacles, etc.)
+├── sound/
+│ ├── audio_jump.mp3
+│ └── audio_score.mp3
+└── README.md
+
+
+---
+
+## 🚀 How to Play
+
+1. Open the game via GitHub Pages or run `index.html` locally.  
+2. Press **Spacebar** or tap the screen to flap the bird.  
+3. Avoid hitting the obstacles.  
+4. Each time you pass through a gap, your score increases.  
+5. When you crash, press the **Restart** button to try again!
+
+---
+
+## 💡 Future Improvements
+
+- Add multiple obstacle themes or difficulty levels.  
+- Implement parallax layers for more depth.  
+- better the different screen sizes.  
+- Include background music toggle.
+
+---
+
+## 🧑‍💻 Author
+
+Developed by **[Whandger Wolffenbüttel]**  
+Built purely with HTML, CSS, and JavaScript for learning and fun.
+
+---
+
+## 🖼️ Preview
+
+![Flappy Bird Clone Screenshot](./img/preview.png)
+
+---
+
+⭐ If you like this project, give it a star on GitHub!
 
