@@ -54,8 +54,7 @@ Handles all the game logic:
 ## 💡 Future Improvements
 
 - Add multiple obstacle themes or difficulty levels.  
-- Implement parallax layers for more depth.  
-- better the different screen sizes.  
+- Implement parallax layers for more depth.   
 - Include background music toggle.
 
 ---
