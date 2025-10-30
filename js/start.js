@@ -118,8 +118,10 @@ function updateObstacles() {
     obstacleSpeed += obstacleGravity; // velocidade do obstaculo é igual a velocidade dele mais a gravidade
     obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade
     
-    obstacleTop.style.left = obstacleX + "px" // Vai puxando o obstaculo do topo
-    obstacleBottom.style.left = obstacleX + "px" // Vai puxando o obstaculo de baixo
+    // Empurra os objetos para a esquerda usando translateX
+    obstacleTop.style.transform = `translateX(${obstacleX}px) rotate(180deg)`; //Rotaciona o cano de cima para ficar virado para baixo
+    obstacleBottom.style.transform = `translateX(${obstacleX}px)`;
+
     
     const gameBox = document.querySelector('.box'); // pega só o primeiro elemento com a classe 'box'
     const obstacleRect = obstacleTop.getBoundingClientRect();
