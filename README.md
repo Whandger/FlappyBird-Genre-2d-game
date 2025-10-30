@@ -1,5 +1,15 @@
 # 🐦 Flappy Bird Clone
 
+# Flappy Bird Clone
+
+This game is a recreation of the famous **Flappy Bird** game, originally created by **Nguyễn Hà Đông**.
+
+### Credits
+
+- Original game created by **Nguyễn Hà Đông**.
+- This project is a copy made for educational purposes, not for commercial use.
+
+
 A simple yet polished **Flappy Bird-style game** built with **HTML**, **CSS**, and **JavaScript**.  
 Fly through obstacles, score points, and enjoy smooth animations with realistic gravity and motion physics.
 
