@@ -61,7 +61,6 @@ function gameStart() {
         updateObstacles(); // Puxa a função responsavel pela velocidade e recriação dos objetos
         scenarie();
         colission();
-        updateScore();
     }, 25); // em quantos milisegundos o jogo acontece
   }
 
@@ -97,8 +96,8 @@ function scenarie() {
   bg1X -= bgSpeed;
   bg2X -= bgSpeed;
 
-  bg1.style.left = bg1X + "px";
-  bg2.style.left = bg2X + "px";
+  bg1.style.transform = `translateX(${bg1X}px)`;
+  bg2.style.transform = `translateX(${bg2X}px)`;
 
   // Quando um fundo sai totalmente da tela, move ele pro final do outro
   if (bg1X + window.innerWidth <= 0) {
@@ -107,6 +106,7 @@ function scenarie() {
 
   if (bg2X + window.innerWidth <= 0) {
     bg2X = bg1X + window.innerWidth;
+
   }
 }
 
@@ -129,6 +129,9 @@ function updateObstacles() {
     
     // Se o obstáculo passou totalmente da tela
     if (obstacleRect.right < boxRect.left) {
+      score++;  
+      scoreSound.play();
+      scoreNumber.innerHTML = score;
       restartObject();
     }
 }
@@ -137,7 +140,8 @@ function restartObject() {
     obstacleX = window.innerWidth + 450; // começa fora da tela
   
     const screenHeight = window.innerHeight; // altura da tela atual
-    const gapSize = screenHeight * 0.25; // espaço entre os canos = 25% da tela
+    const screenWidth = window.innerWidth; 
+    const gapSize = Math.min(screenHeight, screenWidth) * 0.4; // 30% da menor dimensão (altura ou largura)
     const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
     const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
   
@@ -173,20 +177,6 @@ function colission() {
         }
     }
 }
-
-function updateScore() {
-    const birdRect = flapBird.getBoundingClientRect();
-    const topRect = obstacleTop.getBoundingClientRect();
-
-    // Se acabou de reiniciar, ignora este frame
-    if (obstacleJustReset) return;
-
-    if (!obstaclePassed && birdRect.left > topRect.right) {
-      obstaclePassed = true;
-      score++;  
-      scoreSound.play();
-      scoreNumber.innerHTML = score;
-}}
 
 function createRestartButton() {
     const restartButton = document.getElementById("restartButton");
