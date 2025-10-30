@@ -1,7 +1,5 @@
 # 🐦 Flappy Bird Clone
 
-# Flappy Bird Clone
-
 This game is a recreation of the famous **Flappy Bird** game, originally created by **Nguyễn Hà Đông**.
 
 ### Credits
