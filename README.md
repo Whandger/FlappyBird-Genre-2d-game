@@ -19,7 +19,7 @@ https://whandger.github.io/FlappyBird-Genre-2d-game/
 
 - 🕹️ **Keyboard & Touch Controls** — Press **Space** or tap the screen to make the bird jump.  
 - 🌍 **Infinite Scrolling Background** — Seamless scene movement for a continuous gameplay feel.  
-- 🪶 **Smooth Bird Rotation** — Bird tilts up and down dynamically based on its velocity.  
+- 🐦 **Smooth Bird Rotation** — Bird tilts up and down dynamically based on its velocity.  
 - 🎯 **Score System** — Earn points each time you pass an obstacle.  
 - 🔄 **Restart Button** — Appears automatically when the game ends.  
 - 🔊 **Sound Effects** — Jump and score sounds stored in the `/sound` folder.
