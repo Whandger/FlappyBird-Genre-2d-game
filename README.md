@@ -4,6 +4,8 @@ A simple yet polished **Flappy Bird-style game** built with **HTML**, **CSS**, a
 Fly through obstacles, score points, and enjoy smooth animations with realistic gravity and motion physics.
 
 ---
+## Deploy
+https://whandger.github.io/FlappyBird-Genre-2d-game/
 
 ## 🎮 Features
 
