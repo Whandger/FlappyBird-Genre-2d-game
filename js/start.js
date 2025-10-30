@@ -162,20 +162,31 @@ function restartObject() {
   
 
 function colission() {
-    const birdRect = flapBird.getBoundingClientRect();
-    const obstacles = [obstacleTop, obstacleBottom]; // lista de obstáculos
-
-    for (let obstacle of obstacles) {
-        const rect = obstacle.getBoundingClientRect();
-        // Checagem de colisão
-        if (!(birdRect.right < rect.left || //se o lado direito do passaro é menor que o canto esquerdo do objeto
-              birdRect.left > rect.right || 
-              birdRect.bottom < rect.top || 
-              birdRect.top > rect.bottom)) {
-            createRestartButton();
-            break; // interrompe o loop, já que bateu em algum
-        }
+  const birdRect = flapBird.getBoundingClientRect();
+  const birdLeft = birdRect.left;
+  const birdRight = birdRect.right;
+  const birdTop = birdRect.top;
+  const birdBottom = birdRect.bottom;
+  
+  const obstacles = [obstacleTop, obstacleBottom];
+  
+  for (let obstacle of obstacles) {
+    const rect = obstacle.getBoundingClientRect();
+    const obstacleLeft = rect.left;
+    const obstacleRight = rect.right;
+    const obstacleTop = rect.top;
+    const obstacleBottom = rect.bottom;
+  
+    // Verificação de colisão (usando as bordas)
+    if (!(birdRight < obstacleLeft || 
+          birdLeft > obstacleRight || 
+          birdBottom < obstacleTop || 
+          birdTop > obstacleBottom)) {
+       createRestartButton();
+       break;
     }
+  }
+  
 }
 
 function createRestartButton() {
