@@ -1,4 +1,7 @@
 window.onload = function() { //primeira função começa ao apertar o botão start
+      // Atualiza o texto na tela
+    document.getElementById('highScore').innerText = `Record: ${highScore}`;
+
     const botao = document.getElementById('button');
     botao.addEventListener('click', start);
 }
@@ -24,6 +27,7 @@ const gapSize = Math.min(screenHeight, screenWidth) * 0.4; // 40% da menor dimen
 const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
 const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
 // Pontuação
+let highScore = Number(localStorage.getItem('highScore')) || 0;
 let score = 0;
 let scoreSound = new Audio('./sound/audio_score.mp3');
 // Game
@@ -113,7 +117,6 @@ function scenarie() {
   }
 }
 
-
 function updateObstacles() {
     obstacleTop = document.getElementById('obstacle-top') // Pega a div obstacle-top e usa como variavel
     obstacleBottom = document.getElementById('obstacle-bottom') //Pega a div obstacle-bottom e usa como variavel
@@ -148,6 +151,16 @@ function updateObstacles() {
       score++;  
       scoreSound.play();
       scoreNumber.innerHTML = score;
+
+        // Se o jogador faz um novo recorde
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('highScore', highScore);
+    }
+    
+    // Atualiza o texto na tela
+    document.getElementById('highScore').innerText = `Record: ${highScore}`;
+
       restartObject();
     }
 }
@@ -213,7 +226,7 @@ function endGame() {
   
 function restartGame() {
     const restartButton = document.getElementById("restartButton");
-  
+
     // Esconde o botão e remove o evento
     restartButton.style.display = "none";
     restartButton.disabled = true;

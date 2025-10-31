@@ -79,13 +79,13 @@
     position: absolute;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     color: aliceblue;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 600;
     z-index: 1;
     margin-bottom: 90vh;
-    width: 7vw;
+    width:90vw;
     height: 7vw;
   }  
   
