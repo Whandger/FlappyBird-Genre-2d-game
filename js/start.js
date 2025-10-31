@@ -115,7 +115,20 @@ function updateObstacles() {
     obstacleTop = document.getElementById('obstacle-top') // Pega a div obstacle-top e usa como variavel
     obstacleBottom = document.getElementById('obstacle-bottom') //Pega a div obstacle-bottom e usa como variavel
 
-    obstacleSpeed += obstacleGravity; // velocidade do obstaculo é igual a velocidade dele mais a gravidade
+    // Controle de velocidade do objeto por score
+    if (score >= 0)
+      obstacleSpeed = 4
+    if (score >= 3)
+      obstacleSpeed = 6
+    if (score >= 6)
+      obstacleSpeed = 8
+    if (score >= 10)
+      obstacleSpeed = 10
+    if (score >= 15)
+      obstacleSpeed = 12
+    if (score >= 20)
+      obstacleSpeed = 14
+
     obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade
     
     // Empurra os objetos para a esquerda usando translateX
