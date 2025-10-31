@@ -68,7 +68,7 @@ Handles all the game logic:
 
 ---
 
-## 🧑‍💻 Author
+## 💻 Author
 
 Developed by **[Whandger Wolffenbüttel]**  
 Built purely with HTML, CSS, and JavaScript for learning and fun.
