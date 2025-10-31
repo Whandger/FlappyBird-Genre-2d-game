@@ -3,6 +3,9 @@ window.onload = function() { //primeira função começa ao apertar o botão sta
     botao.addEventListener('click', start);
 }
 
+// pc parameters
+const screenHeight = window.innerHeight;
+const screenWidth = window.innerWidth;
 // background
 let bg1X = 0;
 let bg2X = window.innerWidth;
@@ -16,13 +19,13 @@ let jumpSound = new Audio('./sound/audio_jump.mp3')
 // Obstaculo
 let obstacleX = window.innerWidth + 0; // 200px fora da tela     // posição X obstaculos
 let alturaCano = 0;      // altura aleatoria dos canos
-let obstacleGravity = 0.01;  // a força que puxa o obstaculo para esquerda
 let obstacleSpeed = 0; // velocidade do obstaculo
+const gapSize = Math.min(screenHeight, screenWidth) * 0.4; // 40% da menor dimensão (altura ou largura)
+const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
+const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
 // Pontuação
 let score = 0;
 let scoreSound = new Audio('./sound/audio_score.mp3');
-let obstaclePassed = false;
-let obstacleJustReset = false;
 // Game
 let gameInterval;
 let isGameRunning = false; // Vê se o jogo esta rodando 
@@ -152,25 +155,12 @@ function updateObstacles() {
 function restartObject() {
     obstacleX = window.innerWidth + 450; // começa fora da tela
   
-    const screenHeight = window.innerHeight; // altura da tela atual
-    const screenWidth = window.innerWidth; 
-    const gapSize = Math.min(screenHeight, screenWidth) * 0.4; // 30% da menor dimensão (altura ou largura)
-    const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
-    const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
-  
     // gera uma altura aleatória dentro do intervalo
     let alturaCano = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
   
     // aplica as alturas dinamicamente
     obstacleTop.style.height = alturaCano + "px";
     obstacleBottom.style.height = (screenHeight - alturaCano - gapSize) + "px";
-  
-    obstaclePassed = false;
-    obstacleJustReset = true;
-  
-    setTimeout(() => {
-      obstacleJustReset = false;
-    }, 5);
   }
   
 
@@ -222,7 +212,6 @@ function endGame() {
 }
   
 function restartGame() {
-    
     const restartButton = document.getElementById("restartButton");
   
     // Esconde o botão e remove o evento
@@ -233,7 +222,6 @@ function restartGame() {
     // Reseta o jogo
     velocity = 0;
     birdY = 255;
-    obstacleGravity = 0.01;
     obstacleSpeed = 0;
     obstacleX = window.innerWidth + 0;
     bg1X = 0;

@@ -57,27 +57,22 @@
 }
 
   div.obstacle-top {
-    transition: left 0.02s linear; /* deixa o movimento suave */
-    position: absolute;
     top: 0;
-    height: 35vh;
-    width: 16vw;
-    background-image: url(../images/pipe.png);
-    background-repeat: no-repeat;
-    background-size: cover;
     transform: rotate(180deg);
   }
 
-
   div.obstacle-bottom {
-    transition: left 0.02s linear; /* deixa o movimento suave */
-    position: absolute;
     bottom: 0;
-    height: 35vh;
-    width: 16vw;
+  } 
+  
+  div.obstacle-bottom, div.obstacle-top{
+    position: absolute;
+    transition: left 0.02s linear; /* deixa o movimento suave */
     background-image: url(../images/pipe.png);
     background-repeat: no-repeat;
     background-size: cover;
+    height: 35vh;
+    width: 16vw;
   }
 
   div.score{
