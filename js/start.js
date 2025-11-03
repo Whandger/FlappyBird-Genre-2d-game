@@ -233,7 +233,7 @@ function createRestartButton() {
 function endGame() {
     // Atualiza o texto na tela
     document.getElementById('highScore').innerText = `Record: ${highScore}`;
-    
+
     cancelAnimationFrame(gameLoopId);
     isGameRunning = false;
 }
