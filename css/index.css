@@ -53,7 +53,18 @@
     width: 7vw; 
     margin-left: 3vw;
     } #flapBird {
-    transition: left 0.02s linear; /* deixa o movimento suave */
+      transition: left 0.02s linear; /* deixa o movimento suave */
+      position: absolute;
+      bottom: 0; /* ponto de referência para o translateY */
+      left: 30px;
+}
+
+#flapBird,
+#background1,
+#background2,
+#obstacle-top,
+#obstacle-bottom {
+  will-change: transform;
 }
 
   div.obstacle-top {

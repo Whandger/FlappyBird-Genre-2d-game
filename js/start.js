@@ -1,9 +1,12 @@
 window.onload = function() { //primeira função começa ao apertar o botão start
-      // Atualiza o texto na tela
-    document.getElementById('highScore').innerText = `Record: ${highScore}`;
+  document.getElementById('highScore').innerText = `Record: ${highScore}`;       // Atualiza o texto de record na tela
 
-    const botao = document.getElementById('button');
-    botao.addEventListener('click', start);
+  obstacleTop = document.getElementById('obstacle-top'); // define o obstaculo de cima para não gerar no meio das funções
+  obstacleBottom = document.getElementById('obstacle-bottom'); // define o obstaculo de baixo para não gerar no meio das funções
+  flapBird = document.getElementById('flapBird'); // define o obstaculo do passaro para não gerar no meio das funções
+  
+  const botao = document.getElementById('button');
+  botao.addEventListener('click', start);
 }
 
 // pc parameters
@@ -14,10 +17,11 @@ let bg1X = 0;
 let bg2X = window.innerWidth;
 let bgSpeed = 2; // velocidade constante do cenário
 // Passaro
+let flapBird;
 let currentAngle = 0;           // variável global para armazenar o ângulo atual
-let gravity = 0.4;           // A força que puxa pra baixo
+let gravity = 0.3;           // A força que puxa pra baixo
 let velocity = 0;          // Velocidade atual do pássaro
-let birdY = 255;           // Posição vertical inicial
+let birdY = 250;           // Posição vertical inicial
 let jumpSound = new Audio('./sound/audio_jump.mp3')
 // Obstaculo
 let obstacleX = window.innerWidth + 0; // 200px fora da tela     // posição X obstaculos
@@ -33,7 +37,8 @@ let scoreSound = new Audio('./sound/audio_score.mp3');
 // Game
 let gameInterval;
 let isGameRunning = false; // Vê se o jogo esta rodando 
-
+let gameLoopId;
+let lastTime = 0;
 
 
 function start() {
@@ -46,7 +51,7 @@ function start() {
 }
 
 function gameStart() {
-    const flapBird = document.getElementById('flapBird');
+    flapBird = document.getElementById('flapBird');
     isGameRunning = true;
     
     document.addEventListener('keydown', (event) => {
@@ -54,27 +59,32 @@ function gameStart() {
         if (event.code === 'Space') {
             if (isGameRunning == true) { // se o jogo ta rodando
             jumpSound.play();
-            velocity = -8; // Adiciona um pulo ao boneco 8 pixels pra cima
+            velocity = -7; // Adiciona um pulo ao boneco 8 pixels pra cima
         }}})
 
-    document.addEventListener('touchstart', () => {
+    document.addEventListener('touchstart', () => { // Toque na tela
         if (isGameRunning == true) {
           jumpSound.play();
-          velocity = -8;
+          velocity = -7;
           }});
 
-    gameInterval = setInterval(() => { //looping
-        updateBird();  // puxa a função responsavel pela gravidade e limites do passaro
-        updateObstacles(); // Puxa a função responsavel pela velocidade e recriação dos objetos
-        scenarie();
-        colission();
-    }, 25); // em quantos milisegundos o jogo acontece
+          gameLoop(); // inicia o loop de animação
+  }
+
+function gameLoop() { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
+  updateBird();
+  updateObstacles();
+  scenarie();
+  colission();
+
+  if (isGameRunning) { // Se o jogo estiver rodando
+    gameLoopId = requestAnimationFrame(gameLoop);
+  }
   }
 
 function updateBird() {
     velocity += gravity; // velocidade é igual a velocidade mais gravidade
     birdY -= velocity; // linha vertical do passaro é igual a ela menos a velocidade
-    flapBird.style.bottom = birdY + 'px'; // passaro altera a altura que esta, usando birdY + px
 
     let maxAngle = 45; // setta o angulo maximo que ele desce
     let minAngle = -30; // setta o angulo maximo que ele sobe
@@ -85,8 +95,9 @@ function updateBird() {
   
     // Lerp para suavizar a rotação
     currentAngle += (targetAngle - currentAngle) * 0.1; //Angulo atual, começa no 0 + (angulo meta - o angulo atual) * 0,1
-  
-    flapBird.style.transform = `rotate(${currentAngle}deg)`; //troca os graus da rotação do passaro
+
+    flapBird.style.transform = `translateY(-${birdY}px) rotate(${currentAngle}deg)`; // Uso de transform e translate pra forçar uso de gpu no celular
+
 
     // Impede de cair fora da tela
     if (birdY <= 0 || birdY >= 900) { // se o Y do passaro for menor que 0 ou maior que 900
@@ -118,22 +129,19 @@ function scenarie() {
 }
 
 function updateObstacles() {
-    obstacleTop = document.getElementById('obstacle-top') // Pega a div obstacle-top e usa como variavel
-    obstacleBottom = document.getElementById('obstacle-bottom') //Pega a div obstacle-bottom e usa como variavel
-
     // Controle de velocidade do objeto por score
     if (score >= 0)
-      obstacleSpeed = 4
+      obstacleSpeed = 3
     if (score >= 3)
-      obstacleSpeed = 6
+      obstacleSpeed = 5
     if (score >= 6)
-      obstacleSpeed = 8
+      obstacleSpeed = 7
     if (score >= 10)
-      obstacleSpeed = 10
+      obstacleSpeed = 9
     if (score >= 15)
-      obstacleSpeed = 12
+      obstacleSpeed = 11
     if (score >= 20)
-      obstacleSpeed = 14
+      obstacleSpeed = 13
 
     obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade
     
@@ -148,14 +156,14 @@ function updateObstacles() {
     
     // Se o obstáculo passou totalmente da tela
     if (obstacleRect.right < boxRect.left) {
-      score++;  
-      scoreSound.play();
-      scoreNumber.innerHTML = score;
+      score++;  // Contabiliza +1 score
+      scoreSound.play(); // Toca o som de ponto
+      scoreNumber.innerHTML = score; // Muda o contador do score
 
         // Se o jogador faz um novo recorde
-    if (score > highScore) {
+    if (score > highScore) { // Se o score for maior que o highScore
       highScore = score;
-      localStorage.setItem('highScore', highScore);
+      localStorage.setItem('highScore', highScore); // Altera o valor do highScore
     }
     
     // Atualiza o texto na tela
@@ -220,7 +228,7 @@ function createRestartButton() {
 }
   
 function endGame() {
-    clearInterval(gameInterval); // ✅ para o loop
+    cancelAnimationFrame(gameLoopId);
     isGameRunning = false;
 }
   
@@ -235,6 +243,7 @@ function restartGame() {
     // Reseta o jogo
     velocity = 0;
     birdY = 255;
+    currentAngle = 0;
     obstacleSpeed = 0;
     obstacleX = window.innerWidth + 0;
     bg1X = 0;
