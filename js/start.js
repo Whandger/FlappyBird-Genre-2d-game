@@ -58,12 +58,14 @@ function gameStart() {
         // A propriedade identifica a tecla física espaço no teclado
         if (event.code === 'Space') {
             if (isGameRunning == true) { // se o jogo ta rodando
+            jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
             jumpSound.play();
             velocity = -7; // Adiciona um pulo ao boneco 8 pixels pra cima
         }}})
 
     document.addEventListener('touchstart', () => { // Toque na tela
         if (isGameRunning == true) {
+          jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
           jumpSound.play();
           velocity = -7;
           }});
@@ -96,7 +98,7 @@ function updateBird() {
     // Lerp para suavizar a rotação
     currentAngle += (targetAngle - currentAngle) * 0.1; //Angulo atual, começa no 0 + (angulo meta - o angulo atual) * 0,1
 
-    flapBird.style.transform = `translateY(-${birdY}px) rotate(${currentAngle}deg)`; // Uso de transform e translate pra forçar uso de gpu no celular
+    flapBird.style.transform = `translate3d(0px, -${birdY}px, 0px) rotate(${currentAngle}deg)`; // Uso de transform e translate3d pra forçar uso de gpu no celular
 
 
     // Impede de cair fora da tela
@@ -114,8 +116,8 @@ function scenarie() {
   bg1X -= bgSpeed;
   bg2X -= bgSpeed;
 
-  bg1.style.transform = `translateX(${bg1X}px)`;
-  bg2.style.transform = `translateX(${bg2X}px)`;
+  bg1.style.transform = `translate3d(${bg1X}px, 0, 0)`;
+  bg2.style.transform = `translate3d(${bg2X}px, 0, 0)`;
 
   // Quando um fundo sai totalmente da tela, move ele pro final do outro
   if (bg1X + window.innerWidth <= 0) {
@@ -133,21 +135,25 @@ function updateObstacles() {
     if (score >= 0)
       obstacleSpeed = 3
     if (score >= 3)
-      obstacleSpeed = 5
+      obstacleSpeed = 4
     if (score >= 6)
-      obstacleSpeed = 7
+      obstacleSpeed = 6
     if (score >= 10)
-      obstacleSpeed = 9
+      obstacleSpeed = 8
     if (score >= 15)
-      obstacleSpeed = 11
+      obstacleSpeed = 10
     if (score >= 20)
-      obstacleSpeed = 13
+      obstacleSpeed = 12
+    if (score >= 30)
+      obstacleSpeed = 14
+    if (score >= 40)
+      obstacleSpeed = 16
 
     obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade
     
-    // Empurra os objetos para a esquerda usando translateX
-    obstacleTop.style.transform = `translateX(${obstacleX}px) rotate(180deg)`; //Rotaciona o cano de cima para ficar virado para baixo
-    obstacleBottom.style.transform = `translateX(${obstacleX}px)`;
+    // Empurra os objetos para a esquerda usando translate3d para melhor otimização em celular
+    obstacleTop.style.transform = `translate3d(${obstacleX}px, 0, 0) rotate(180deg)`;
+    obstacleBottom.style.transform = `translate3d(${obstacleX}px, 0, 0)`;
 
     
     const gameBox = document.querySelector('.box'); // pega só o primeiro elemento com a classe 'box'
