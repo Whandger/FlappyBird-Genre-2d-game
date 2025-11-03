@@ -171,9 +171,6 @@ function updateObstacles() {
       highScore = score;
       localStorage.setItem('highScore', highScore); // Altera o valor do highScore
     }
-    
-    // Atualiza o texto na tela
-    document.getElementById('highScore').innerText = `Record: ${highScore}`;
 
       restartObject();
     }
@@ -234,6 +231,9 @@ function createRestartButton() {
 }
   
 function endGame() {
+    // Atualiza o texto na tela
+    document.getElementById('highScore').innerText = `Record: ${highScore}`;
+    
     cancelAnimationFrame(gameLoopId);
     isGameRunning = false;
 }
@@ -245,7 +245,7 @@ function restartGame() {
     restartButton.style.display = "none";
     restartButton.disabled = true;
     restartButton.removeEventListener('click', restartGame);
-  
+
     // Reseta o jogo
     velocity = 0;
     birdY = 255;
