@@ -24,7 +24,7 @@ https://whandger.github.io/FlappyBird-Genre-2d-game/
 - 🎯 **Score System** — Earn points each time you pass an obstacle.  
 - 🔄 **Restart Button** — Appears automatically when the game ends.  
 - 🔊 **Sound Effects** — Jump and score sounds stored in the `/sound` folder.
-- 🔃 **High Score** — Save your score in local Storage
+- 📁 **High Score** — Save your score in local Storage
 
 ---
 
