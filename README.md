@@ -1,4 +1,4 @@
-# 🐦![Flappy Bird Clone Screenshot](./images/bird_flap_loop.gif) Flappy Bird Clone
+#![Flappy Bird Clone Screenshot](./images/bird_flap_loop.gif) Flappy Bird Clone
 
 ### Credits
 
