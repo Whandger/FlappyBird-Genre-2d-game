@@ -1,8 +1,9 @@
 ![Flappy Bird Clone Screenshot](./images/bird_flap_loop.gif) ### Flappy Bird Clone
 <h3>
-  <img src="./images/bird_flap_loop.gif.gif" width="40" style="vertical-align: middle;"/>
+  <img src="./images/bird_flap_loop.gif" width="40" style="vertical-align: middle;"/>
   Flappy Bird Clone
 </h3>
+
 ### Credits
 
 - Original game created by **Nguyễn Hà Đông**.
