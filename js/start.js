@@ -39,6 +39,8 @@ let gameInterval;
 let isGameRunning = false; // Vê se o jogo esta rodando 
 let gameLoopId;
 let lastTime = 0;
+let keyListener;
+let touchListener;
 
 
 function start() {
@@ -70,13 +72,20 @@ function gameStart() {
           velocity = -7;
           }});
 
-          gameLoop(); // inicia o loop de animação
+          velocity = 0;
+          birdy = screenHeight / 2;
+          currentAngle = 0;
+          requestAnimationFrame(gameLoop); // inicia o loop de animação
   }
 
-function gameLoop() { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
-  updateBird();
-  updateObstacles();
-  scenarie();
+function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
+  if (!lastTime) lastTime = timestamp; // evita NaN no primeiro frame
+  const deltaTime = (timestamp - lastTime) / 1000; // normaliza para ~60fps
+  lastTime = timestamp;
+
+  updateBird(deltaTime);
+  updateObstacles(deltaTime);
+  scenarie(deltaTime);
   colission();
 
   if (isGameRunning) { // Se o jogo estiver rodando
@@ -84,37 +93,41 @@ function gameLoop() { // Começa o loop puxando as funções que fazem obstaculo
   }
   }
 
-function updateBird() {
-    velocity += gravity; // velocidade é igual a velocidade mais gravidade
-    birdY -= velocity; // linha vertical do passaro é igual a ela menos a velocidade
-
-    let maxAngle = 45; // setta o angulo maximo que ele desce
-    let minAngle = -30; // setta o angulo maximo que ele sobe
-    let targetAngle = velocity * 5; //angulo do passaro igual velocidade * 5
+  function updateBird(deltaTime) {
+    // deltaTime é o tempo em segundos desde o último frame (~0.016 em 60fps)
   
-    if (targetAngle > maxAngle) targetAngle = maxAngle; // limita o ângulo máximo para não passar do limite pra baixo
-    if (targetAngle < minAngle) targetAngle = minAngle; // limita o ângulo máximo para não passar do limite pra cima
+    // Física
+    velocity += gravity * (deltaTime * 60);  // normaliza pra 60fps
+    birdY -= velocity * (deltaTime * 60);    // movimento idêntico ao original, ajustado pelo tempo
   
-    // Lerp para suavizar a rotação
-    currentAngle += (targetAngle - currentAngle) * 0.1; //Angulo atual, começa no 0 + (angulo meta - o angulo atual) * 0,1
-
-    flapBird.style.transform = `translate3d(0px, -${birdY}px, 0px) rotate(${currentAngle}deg)`; // Uso de transform e translate3d pra forçar uso de gpu no celular
-
-
+    // Limita ângulo
+    let maxAngle = 45;
+    let minAngle = -30;
+    let targetAngle = velocity * 5;
+  
+    if (targetAngle > maxAngle) targetAngle = maxAngle;
+    if (targetAngle < minAngle) targetAngle = minAngle;
+  
+    currentAngle += (targetAngle - currentAngle) * 0.1;
+  
+    // Atualiza posição
+    flapBird.style.transform = `translate3d(0px, -${birdY}px, 0px) rotate(${currentAngle}deg)`;
+  
     // Impede de cair fora da tela
-    if (birdY <= 0 || birdY >= 900) { // se o Y do passaro for menor que 0 ou maior que 900
-      createRestartButton(); // ⬅️ aqui chamamos a função que mostra o botão
-    }
-}
+    if (birdY <= 0 || birdY >= screenHeight) {
+      createRestartButton();
+  }
+  }
+  
 
 
-function scenarie() {
+function scenarie(deltaTime) {
   const bg1 = document.getElementById('background1');
   const bg2 = document.getElementById('background2');
 
   // Move os dois fundos para a esquerda
-  bg1X -= bgSpeed;
-  bg2X -= bgSpeed;
+  bg1X -= bgSpeed * (deltaTime * 60);
+  bg2X -= bgSpeed * (deltaTime * 60);
 
   bg1.style.transform = `translate3d(${bg1X}px, 0, 0)`;
   bg2.style.transform = `translate3d(${bg2X}px, 0, 0)`;
@@ -130,7 +143,7 @@ function scenarie() {
   }
 }
 
-function updateObstacles() {
+function updateObstacles(deltaTime) {
     // Controle de velocidade do objeto por score
     if (score >= 0)
       obstacleSpeed = 3
@@ -149,7 +162,7 @@ function updateObstacles() {
     if (score >= 40)
       obstacleSpeed = 16
 
-    obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade
+    obstacleX -= obstacleSpeed * (deltaTime * 60);  // posição do obstaculo é igual a posião menos a velocidade
     
     // Empurra os objetos para a esquerda usando translate3d para melhor otimização em celular
     obstacleTop.style.transform = `translate3d(${obstacleX}px, 0, 0) rotate(180deg)`;
@@ -248,16 +261,16 @@ function restartGame() {
 
     // Reseta o jogo
     velocity = 0;
-    birdY = 255;
+    birdY = 650;
     currentAngle = 0;
     obstacleSpeed = 0;
-    obstacleX = window.innerWidth + 0;
+    obstacleX = window.innerWidth + 450;
     bg1X = 0;
     bg2X = window.innerWidth;
     score = 0;
     scoreNumber.innerHTML = score;
 
     // Reinicia
-    start();
+    gameStart();
 }
   
