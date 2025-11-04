@@ -112,13 +112,11 @@ function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem 
     flapBird.style.transform = `translate3d(0px, -${birdY}px, 0px) rotate(${currentAngle}deg)`;
   
     // Impede de cair fora da tela
-    if (birdY <= 0 || birdY >= screenHeight) {
+    if (birdY <= 0 || birdY >= 900) {
       createRestartButton();
   }
   }
   
-
-
 function scenarie(deltaTime) {
   const bg1 = document.getElementById('background1');
   const bg2 = document.getElementById('background2');
@@ -166,7 +164,6 @@ function updateObstacles(deltaTime) {
     obstacleTop.style.transform = `translate3d(${obstacleX}px, 0, 0) rotate(180deg)`;
     obstacleBottom.style.transform = `translate3d(${obstacleX}px, 0, 0)`;
 
-    
     const gameBox = document.querySelector('.box'); // pega só o primeiro elemento com a classe 'box'
     const obstacleRect = obstacleTop.getBoundingClientRect();
     const boxRect = gameBox.getBoundingClientRect();
@@ -198,7 +195,6 @@ function restartObject() {
     obstacleBottom.style.height = (screenHeight - alturaCano - gapSize) + "px";
   }
   
-
 function colission() {
   const birdRect = flapBird.getBoundingClientRect();
   const birdLeft = birdRect.left;
