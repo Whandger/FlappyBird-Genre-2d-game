@@ -31,16 +31,14 @@ const gapSize = Math.min(screenHeight, screenWidth) * 0.4; // 40% da menor dimen
 const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
 const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
 // Pontuação
-let highScore = Number(localStorage.getItem('highScore')) || 0;
-let score = 0;
+let highScore = Number(localStorage.getItem('highScore')) || 0; // Pega o highScore do LocalStorage, se não existe é 0
+let score = 0; // Score começa no 0
 let scoreSound = new Audio('./sound/audio_score.mp3');
 // Game
 let gameInterval;
 let isGameRunning = false; // Vê se o jogo esta rodando 
 let gameLoopId;
 let lastTime = 0;
-let keyListener;
-let touchListener;
 
 
 function start() {
