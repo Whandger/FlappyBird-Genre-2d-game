@@ -1,7 +1,7 @@
-<h2>
+<h1>
   <img src="./images/bird_flap_loop.gif" width="40" style="vertical-align: middle;"/>
   Flappy Bird Clone
-</h2>
+</h1>
 
 ### Credits
 
