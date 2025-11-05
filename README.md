@@ -70,6 +70,8 @@ Handles all the game logic:
 
 ---
 
+⚠️ Performance Note: The game is optimized for 60 Hz displays. Using deltaTime improved performance on Android and PC, but causes lag on iPhone.
+
 ## 💻 Author
 
 Developed by **[Whandger Wolffenbüttel]**  
