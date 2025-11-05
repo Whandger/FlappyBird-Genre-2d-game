@@ -188,7 +188,7 @@ function updateObstacles(deltaTime, boxRect) {
     // Se o obstáculo passou totalmente da tela
     if (obstacleRect.right < boxRect.left) {
       score++;  // Contabiliza +1 score
-      scoreSound.play(); // Toca o som de ponto
+      //scoreSound.play(); // Toca o som de ponto
       scoreNumber.innerHTML = score; // Muda o contador do score
 
         // Se o jogador faz um novo recorde
@@ -274,3 +274,4 @@ function restartGame() {
 }
 
   
+
