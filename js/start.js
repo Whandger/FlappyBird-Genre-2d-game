@@ -15,22 +15,22 @@ const screenWidth = window.innerWidth;
 // background
 let bg1X = 0;
 let bg2X = window.innerWidth;
-let bgSpeed = 2; // velocidade constante do cenário
+let bgSpeed = 2;            // velocidade constante do cenário
 // Passaro
 let flapBird;
-let currentAngle = 0;           // variável global para armazenar o ângulo atual
-let gravity =0.3;           // A força que puxa pra baixo
-let velocity = 0;          // Velocidade atual do pássaro
-let birdY = 250;           // Posição vertical inicial
-let jump = -7;             // força do pulo
+let currentAngle = 0;       // variável global para armazenar o ângulo atual
+let gravity =0.2;           // A força que puxa pra baixo
+let velocity = 0;           // Velocidade atual do pássaro
+let birdY = 250;            // Posição vertical inicial
+let jump = -5;              // força do pulo
 let jumpSound = new Audio('./sound/audio_jump.mp3')
 // Obstaculo
 let obstacleX = window.innerWidth + 0; // 200px fora da tela     // posição X obstaculos
-let alturaCano = 0;      // altura aleatoria dos canos
-let obstacleSpeed = 0; // velocidade do obstaculo
+let alturaCano = 0;                    // altura aleatoria dos canos
+let obstacleSpeed = 0;                 // velocidade do obstaculo
 const gapSize = Math.min(screenHeight, screenWidth) * 0.4; // 40% da menor dimensão (altura ou largura)
-const minHeight = screenHeight * 0.1; // altura mínima do cano de cima (10%)
-const maxHeight = screenHeight * 0.5; // altura máxima do cano de cima (50%)
+const minHeight = screenHeight * 0.1;  // altura mínima do cano de cima (10%)
+const maxHeight = screenHeight * 0.5;  // altura máxima do cano de cima (50%)
 // Pontuação
 let highScore = Number(localStorage.getItem('highScore')) || 0; // Pega o highScore do LocalStorage, se não existe é 0
 let score = 0; // Score começa no 0
@@ -51,11 +51,11 @@ function start() {
     gameStart(); // puxa a função gameStart e começa o jogo
 }
 
-function jumpAction() {
+function jumpAction() { // Função que cuida do pulo do passaro
   if (!isGameRunning) return; // só pula se o jogo estiver ativo
   
   jumpSound.currentTime = 0;
-  jumpSound.cloneNode().play();
+  jumpSound.cloneNode().play(); // Clone no som de pulo para não afetar o uso de processamento
   velocity = jump; // aplica o pulo
 }
 
@@ -103,7 +103,7 @@ function gameLoop() { // Começa o loop puxando as funções que fazem obstaculo
   }
   }
 
-function updateBird() {
+function updateBird() { // função que cuida da queda, angulo, colisão de teto e chão do passaro
     // deltaTime é o tempo em segundos desde o último frame (~0.016 em 60fps)
   // Física, usando DeltaTime para controle de frame rate
   velocity += gravity; 
@@ -128,7 +128,7 @@ function updateBird() {
   }
   }
   
-function scenarie() {
+function scenarie() { // Função de cenario infinito do fundo
   const bg1 = document.getElementById('background1');
   const bg2 = document.getElementById('background2');
 
@@ -150,24 +150,24 @@ function scenarie() {
   }
 }
 
-function updateObstacles(boxRect) {
+function updateObstacles(boxRect) { // Função que cuida a chamada dos obstaculos, velocidade, pontuação dos obstaculos e chama restartObstaculo
     // Controle de velocidade do objeto por score
     if (score >= 0)
-      obstacleSpeed = 4
+      obstacleSpeed = 2
     if (score >= 3)
-      obstacleSpeed = 8
+      obstacleSpeed = 3
     if (score >= 6)
-      obstacleSpeed = 10
+      obstacleSpeed = 4
     if (score >= 10)
-      obstacleSpeed = 300
+      obstacleSpeed = 5
     if (score >= 15)
-      obstacleSpeed = 350
+      obstacleSpeed = 5.5
     if (score >= 20)
-      obstacleSpeed = 380
+      obstacleSpeed = 6
+    if (score >= 25)
+      obstacleSpeed = 6.5
     if (score >= 30)
-      obstacleSpeed = 400
-    if (score >= 40)
-      obstacleSpeed = obstacleSpeed + 0.05
+      obstacleSpeed = obstacleSpeed + 0.01
 
     obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade vezes o delta
     
@@ -193,7 +193,7 @@ function updateObstacles(boxRect) {
     }
 }
 
-function restartObject() {
+function restartObject() { // Função que usa math.random pra calcular número aleatorio pra altura do cano de cima, e coloca gap entre os canos
     obstacleX = window.innerWidth + 450; // começa fora da tela
   
     // gera uma altura aleatória dentro do intervalo
@@ -204,23 +204,23 @@ function restartObject() {
     obstacleBottom.style.height = (screenHeight - alturaCano - gapSize) + "px";
   }
   
-function colission(boxRect) {
-  const birdRect = flapBird.getBoundingClientRect();
-  const obstacles = [obstacleTop, obstacleBottom];
+function colission(boxRect) { // função que cuida da colisão dos canos e passaro
+  const birdRect = flapBird.getBoundingClientRect(); 
+  const obstacles = [obstacleTop, obstacleBottom]; // junta o cano de cima e o de baixo numa variavel
 
-  for (const obstacle of obstacles) {
-    const rect = obstacle.getBoundingClientRect();
+  for (const obstacle of obstacles) { // Pega o cano dentro dos objetos
+    const rect = obstacle.getBoundingClientRect(); 
     if (!(birdRect.right < rect.left || 
           birdRect.left > rect.right || 
           birdRect.bottom < rect.top || 
           birdRect.top > rect.bottom)) {
-      createRestartButton();
+      createRestartButton(); // Se bater no cano, puxa a função de restart
       break;
     }
   }
 }
 
-function createRestartButton() {
+function createRestartButton() { // função que cria o botão restart
     const restartButton = document.getElementById("restartButton");
   
     // Mostra o botão
@@ -231,10 +231,10 @@ function createRestartButton() {
     restartButton.addEventListener('click', restartGame);
   
     // Chama o endGame para parar o jogo
-    endGame();
+    endGame(); 
 }
   
-function endGame() {
+function endGame() { // atualiza o high score, cancela a animação e coloca o jogo como não rodando
     // Atualiza o texto na tela
     document.getElementById('highScore').innerText = `Record: ${highScore}`;
 
@@ -242,7 +242,7 @@ function endGame() {
     isGameRunning = false;
 }
   
-function restartGame() {
+function restartGame() { // Recomeça o jogo
     const restartButton = document.getElementById("restartButton");
 
     // Esconde o botão e remove o evento
