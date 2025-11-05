@@ -55,7 +55,7 @@ function jumpAction() {
   if (!isGameRunning) return; // só pula se o jogo estiver ativo
   
   jumpSound.currentTime = 0;
-  jumpSound.cloneNode().play();
+  //jumpSound.cloneNode().play();
   velocity = jump; // aplica o pulo
 }
 
@@ -272,4 +272,5 @@ function restartGame() {
     // Reinicia
     gameStart();
 }
+
   
