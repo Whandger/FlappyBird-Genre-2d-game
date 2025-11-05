@@ -51,31 +51,40 @@ function start() {
     gameStart(); // puxa a função gameStart e começa o jogo
 }
 
+function jumpAction() {
+  if (!isGameRunning) return; // só pula se o jogo estiver ativo
+  
+  jumpSound.currentTime = 0;
+  jumpSound.play();
+  velocity = jump; // aplica o pulo
+}
+
 function gameStart() {
     flapBird = document.getElementById('flapBird');
     isGameRunning = true;
     
+    // Pulo usando a tecla espaço
     document.addEventListener('keydown', (event) => {
-        // A propriedade identifica a tecla física espaço no teclado
-        if (event.code === 'Space') {
-            if (isGameRunning == true) { // se o jogo ta rodando
-            jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
-            jumpSound.play();
-            velocity = jump; // Adiciona um pulo ao boneco 8 pixels pra cima
-        }}})
+      if (event.code === 'Space') {
+        jumpAction();
+      }
+    });
+    
+    // Pulo usando touch
+    document.addEventListener('touchstart', (e) => {
+      const restartButton = document.getElementById('restartButton'); // Reconhece o botão de restart
+      if (restartButton && restartButton.contains(e.target)) { // se restart button e restart button conter o alvo do toque
+        return; // deixa o botão funcionar normalmente
+      }
+      e.preventDefault(); // evita o delay de toque no Safari
+      jumpAction(); // chama o pulo
+    }, { passive: false });
+    
 
-    document.addEventListener('touchstart', (e) => { // Toque na tela
-        e.preventDefault(); // impede o zoom e remove o delay de 300ms no Safari
-        if (isGameRunning == true) {
-          jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
-          jumpSound.play();
-          velocity = jump;
-          }}, {passive:false}); // necessário pro preventDefault funcionar no iOS
-
-          velocity = 0;
-          birdy = screenHeight / 2;
-          currentAngle = 0;
-          requestAnimationFrame(gameLoop); // inicia o loop de animação
+    velocity = 0;
+    birdy = screenHeight / 2;
+    currentAngle = 0;
+    requestAnimationFrame(gameLoop); // inicia o loop de animação
   }
 
 function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
