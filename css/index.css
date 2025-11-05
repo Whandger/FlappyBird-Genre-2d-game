@@ -81,6 +81,7 @@
 #obstacle-top,
 #obstacle-bottom {
   will-change: transform;
+  transform: translateZ(0);
 }
 
   div.obstacle-top {

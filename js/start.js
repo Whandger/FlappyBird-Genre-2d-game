@@ -15,13 +15,14 @@ const screenWidth = window.innerWidth;
 // background
 let bg1X = 0;
 let bg2X = window.innerWidth;
-let bgSpeed = 2; // velocidade constante do cenário
+let bgSpeed = 100; // velocidade constante do cenário
 // Passaro
 let flapBird;
 let currentAngle = 0;           // variável global para armazenar o ângulo atual
-let gravity = 0.3;           // A força que puxa pra baixo
+let gravity = 700;           // A força que puxa pra baixo
 let velocity = 0;          // Velocidade atual do pássaro
 let birdY = 250;           // Posição vertical inicial
+let jump = -300             // força do pulo
 let jumpSound = new Audio('./sound/audio_jump.mp3')
 // Obstaculo
 let obstacleX = window.innerWidth + 0; // 200px fora da tela     // posição X obstaculos
@@ -60,14 +61,14 @@ function gameStart() {
             if (isGameRunning == true) { // se o jogo ta rodando
             jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
             jumpSound.play();
-            velocity = -7; // Adiciona um pulo ao boneco 8 pixels pra cima
+            velocity = jump; // Adiciona um pulo ao boneco 8 pixels pra cima
         }}})
 
     document.addEventListener('touchstart', () => { // Toque na tela
         if (isGameRunning == true) {
           jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
           jumpSound.play();
-          velocity = -7;
+          velocity = jump;
           }});
 
           velocity = 0;
@@ -77,9 +78,15 @@ function gameStart() {
   }
 
 function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
-  if (!lastTime) lastTime = timestamp; // evita NaN no primeiro frame
-  const deltaTime = (timestamp - lastTime) / 1000; // normaliza para ~60fps
+  let deltaTime = 0;
+
+  if (lastTime !== 0) {
+    deltaTime = (timestamp - lastTime) / 1000;
+    if (deltaTime > 0.05) deltaTime = 0.05; // limita delta a no máximo 0.05s
+  }
+  
   lastTime = timestamp;
+  
 
   updateBird(deltaTime);
   updateObstacles(deltaTime);
@@ -91,29 +98,28 @@ function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem 
   }
   }
 
-  function updateBird(deltaTime) {
+function updateBird(deltaTime) {
     // deltaTime é o tempo em segundos desde o último frame (~0.016 em 60fps)
-  
-    // Física
-    velocity += gravity * (deltaTime * 60);  // normaliza pra 60fps
-    birdY -= velocity * (deltaTime * 60);    // movimento idêntico ao original, ajustado pelo tempo
-  
-    // Limita ângulo
-    let maxAngle = 45;
-    let minAngle = -30;
-    let targetAngle = velocity * 5;
-  
-    if (targetAngle > maxAngle) targetAngle = maxAngle;
-    if (targetAngle < minAngle) targetAngle = minAngle;
-  
-    currentAngle += (targetAngle - currentAngle) * 0.1;
-  
-    // Atualiza posição
-    flapBird.style.transform = `translate3d(0px, -${birdY}px, 0px) rotate(${currentAngle}deg)`;
-  
-    // Impede de cair fora da tela
-    if (birdY <= 0 || birdY >= 900) {
-      createRestartButton();
+  // Física, usando DeltaTime para controle de frame rate
+  velocity += gravity * deltaTime; 
+  birdY -= velocity * deltaTime;    
+
+  // Limita ângulo
+  let maxAngle = 45;
+  let minAngle = -30;
+  let targetAngle = velocity * 5;
+
+  if (targetAngle > maxAngle) targetAngle = maxAngle;
+  if (targetAngle < minAngle) targetAngle = minAngle;
+
+  currentAngle += (targetAngle - currentAngle) * 0.1;
+
+  // Atualiza posição
+  flapBird.style.transform = `translate3d(0px, -${birdY}px, 0px) rotate(${currentAngle}deg)`;
+
+  // Impede de cair fora da tela
+  if (birdY <= 0 || birdY >= 900) {
+    createRestartButton();
   }
   }
   
@@ -122,8 +128,8 @@ function scenarie(deltaTime) {
   const bg2 = document.getElementById('background2');
 
   // Move os dois fundos para a esquerda
-  bg1X -= bgSpeed * (deltaTime * 60);
-  bg2X -= bgSpeed * (deltaTime * 60);
+  bg1X -= bgSpeed * deltaTime;
+  bg2X -= bgSpeed * deltaTime;
 
   bg1.style.transform = `translate3d(${bg1X}px, 0, 0)`;
   bg2.style.transform = `translate3d(${bg2X}px, 0, 0)`;
@@ -142,23 +148,23 @@ function scenarie(deltaTime) {
 function updateObstacles(deltaTime) {
     // Controle de velocidade do objeto por score
     if (score >= 0)
-      obstacleSpeed = 3
+      obstacleSpeed = 120
     if (score >= 3)
-      obstacleSpeed = 4
+      obstacleSpeed = 150
     if (score >= 6)
-      obstacleSpeed = 6
+      obstacleSpeed = 180
     if (score >= 10)
-      obstacleSpeed = 8
+      obstacleSpeed = 200
     if (score >= 15)
-      obstacleSpeed = 10
+      obstacleSpeed = 220
     if (score >= 20)
-      obstacleSpeed = 12
+      obstacleSpeed = 240
     if (score >= 30)
-      obstacleSpeed = 14
+      obstacleSpeed = 260
     if (score >= 40)
-      obstacleSpeed = 16
+      obstacleSpeed = 280
 
-    obstacleX -= obstacleSpeed * (deltaTime * 60);  // posição do obstaculo é igual a posião menos a velocidade
+    obstacleX -= obstacleSpeed * deltaTime;  // posição do obstaculo é igual a posião menos a velocidade vezes o delta
     
     // Empurra os objetos para a esquerda usando translate3d para melhor otimização em celular
     obstacleTop.style.transform = `translate3d(${obstacleX}px, 0, 0) rotate(180deg)`;
@@ -255,7 +261,7 @@ function restartGame() {
 
     // Reseta o jogo
     velocity = 0;
-    birdY = 650;
+    birdY = 300;
     currentAngle = 0;
     obstacleSpeed = 0;
     obstacleX = window.innerWidth + 450;
