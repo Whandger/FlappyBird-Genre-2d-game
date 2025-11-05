@@ -57,7 +57,23 @@
       position: absolute;
       bottom: 0; /* ponto de referência para o translateY */
       left: 30px;
+      animation: baterAsAsas 1s infinite;
 }
+
+}
+@keyframes baterAsAsas {
+  0%, 100% {
+    content: url('../images/bird1.png'); /* Imagem com asas abaixadas */
+  }
+  25% {
+    content: url('../images/bird2.png'); /* Imagem com asas levantadas */
+  }
+  50% {
+    content: url('../images/bird3.png'); /* Imagem com asas levantadas */
+  }
+  75% {
+    content: url('../images/bird4.png'); /* Imagem com asas levantadas */
+  }
 
 #flapBird,
 #background1,
@@ -160,3 +176,4 @@
 
 
   }
+
