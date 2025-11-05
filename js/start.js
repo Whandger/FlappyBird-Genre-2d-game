@@ -15,14 +15,14 @@ const screenWidth = window.innerWidth;
 // background
 let bg1X = 0;
 let bg2X = window.innerWidth;
-let bgSpeed = 100; // velocidade constante do cenário
+let bgSpeed = 2; // velocidade constante do cenário
 // Passaro
 let flapBird;
 let currentAngle = 0;           // variável global para armazenar o ângulo atual
-let gravity = 700;           // A força que puxa pra baixo
+let gravity =0.3;           // A força que puxa pra baixo
 let velocity = 0;          // Velocidade atual do pássaro
 let birdY = 250;           // Posição vertical inicial
-let jump = -300             // força do pulo
+let jump = -7;             // força do pulo
 let jumpSound = new Audio('./sound/audio_jump.mp3')
 // Obstaculo
 let obstacleX = window.innerWidth + 0; // 200px fora da tela     // posição X obstaculos
@@ -87,23 +87,15 @@ function gameStart() {
     requestAnimationFrame(gameLoop); // inicia o loop de animação
   }
 
-function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
-  let deltaTime = 0; // Inicializa o valor — evita undefined no primeiro frame.
-
-  if (lastTime !== 0) {
-    deltaTime = (timestamp - lastTime) / 1000;
-    if (deltaTime > 0.05) deltaTime = 0.05; // limita delta a no máximo 0.05s
-  }
-  
-  lastTime = timestamp;
+function gameLoop() { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
 
   // Calcula posição da área de jogo só uma vez por frame
   const gameBox = document.querySelector('.box');
   const boxRect = gameBox.getBoundingClientRect();
 
-  updateBird(deltaTime);
-  updateObstacles(deltaTime, boxRect);
-  scenarie(deltaTime);
+  updateBird();
+  updateObstacles(boxRect);
+  scenarie();
   colission(boxRect);
 
   if (isGameRunning) { // Se o jogo estiver rodando
@@ -111,11 +103,11 @@ function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem 
   }
   }
 
-function updateBird(deltaTime) {
+function updateBird() {
     // deltaTime é o tempo em segundos desde o último frame (~0.016 em 60fps)
   // Física, usando DeltaTime para controle de frame rate
-  velocity += gravity * deltaTime; 
-  birdY -= velocity * deltaTime;    
+  velocity += gravity; 
+  birdY -= velocity;    
 
   // Limita ângulo
   let maxAngle = 45;
@@ -136,13 +128,13 @@ function updateBird(deltaTime) {
   }
   }
   
-function scenarie(deltaTime) {
+function scenarie() {
   const bg1 = document.getElementById('background1');
   const bg2 = document.getElementById('background2');
 
   // Move os dois fundos para a esquerda
-  bg1X -= bgSpeed * deltaTime;
-  bg2X -= bgSpeed * deltaTime;
+  bg1X -= bgSpeed;
+  bg2X -= bgSpeed;
 
   bg1.style.transform = `translate3d(${bg1X}px, 0, 0)`;
   bg2.style.transform = `translate3d(${bg2X}px, 0, 0)`;
@@ -158,14 +150,14 @@ function scenarie(deltaTime) {
   }
 }
 
-function updateObstacles(deltaTime, boxRect) {
+function updateObstacles(boxRect) {
     // Controle de velocidade do objeto por score
     if (score >= 0)
-      obstacleSpeed = 150
+      obstacleSpeed = 4
     if (score >= 3)
-      obstacleSpeed = 200
+      obstacleSpeed = 8
     if (score >= 6)
-      obstacleSpeed = 250
+      obstacleSpeed = 10
     if (score >= 10)
       obstacleSpeed = 300
     if (score >= 15)
@@ -177,7 +169,7 @@ function updateObstacles(deltaTime, boxRect) {
     if (score >= 40)
       obstacleSpeed = obstacleSpeed + 0.05
 
-    obstacleX -= obstacleSpeed * deltaTime;  // posição do obstaculo é igual a posião menos a velocidade vezes o delta
+    obstacleX -= obstacleSpeed;  // posição do obstaculo é igual a posião menos a velocidade vezes o delta
     
     // Empurra os objetos para a esquerda usando translate3d para melhor otimização em celular
     obstacleTop.style.transform = `translate3d(${obstacleX}px, 0, 0) rotate(180deg)`;
@@ -272,7 +264,4 @@ function restartGame() {
     // Reinicia
     gameStart();
 }
-
   
-
-
