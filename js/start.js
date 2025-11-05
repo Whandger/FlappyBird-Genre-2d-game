@@ -55,7 +55,7 @@ function jumpAction() {
   if (!isGameRunning) return; // só pula se o jogo estiver ativo
   
   jumpSound.currentTime = 0;
-  //jumpSound.cloneNode().play();
+  jumpSound.cloneNode().play();
   velocity = jump; // aplica o pulo
 }
 
@@ -188,7 +188,7 @@ function updateObstacles(deltaTime, boxRect) {
     // Se o obstáculo passou totalmente da tela
     if (obstacleRect.right < boxRect.left) {
       score++;  // Contabiliza +1 score
-      //scoreSound.play(); // Toca o som de ponto
+      scoreSound.play(); // Toca o som de ponto
       scoreNumber.innerHTML = score; // Muda o contador do score
 
         // Se o jogador faz um novo recorde
@@ -274,4 +274,5 @@ function restartGame() {
 }
 
   
+
 
