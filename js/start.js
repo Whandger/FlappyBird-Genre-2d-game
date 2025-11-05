@@ -64,12 +64,13 @@ function gameStart() {
             velocity = jump; // Adiciona um pulo ao boneco 8 pixels pra cima
         }}})
 
-    document.addEventListener('touchstart', () => { // Toque na tela
+    document.addEventListener('touchstart', (e) => { // Toque na tela
+        e.preventDefault(); // impede o zoom e remove o delay de 300ms no Safari
         if (isGameRunning == true) {
           jumpSound.currentTime = 0; // Volta o som pro 0 toda vez que o usuario pula de novo
           jumpSound.play();
           velocity = jump;
-          }});
+          }}, {passive:false}); // necessário pro preventDefault funcionar no iOS
 
           velocity = 0;
           birdy = screenHeight / 2;
