@@ -44,7 +44,7 @@ Simple but effective styling for:
 
 ### ⚙️ JavaScript
 Handles all the game logic:
-- Physics (gravity, velocity, collision detection). Delta time is used to normalize movement across different frames rates for smooth gameplay
+- Physics (gravity, velocity, collision detection).
 - Scoring and obstacle repositioning.
 - Background movement using `transform` and smooth rotation with `rotate()`.
 - Event listeners for keyboard (`keydown`) and mobile (`touchstart`) input.
@@ -66,6 +66,7 @@ Handles all the game logic:
 - Add multiple obstacle themes or difficulty levels.  
 - Implement parallax layers for more depth.   
 - Include background music toggle.
+- Include 120hz+ gameplay
 
 ---
 
