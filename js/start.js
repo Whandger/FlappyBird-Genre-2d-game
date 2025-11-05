@@ -55,7 +55,7 @@ function jumpAction() {
   if (!isGameRunning) return; // só pula se o jogo estiver ativo
   
   jumpSound.currentTime = 0;
-  jumpSound.play();
+  jumpSound.cloneNode().play();
   velocity = jump; // aplica o pulo
 }
 
@@ -76,19 +76,19 @@ function gameStart() {
       if (restartButton && restartButton.contains(e.target)) { // se restart button e restart button conter o alvo do toque
         return; // deixa o botão funcionar normalmente
       }
-      e.preventDefault(); // evita o delay de toque no Safari
+      e.preventDefault(); // evita o delay de toque no Safari, e bloqueia toque padrão do navegador
       jumpAction(); // chama o pulo
-    }, { passive: false });
+    }, { passive: false }); // boa pratica, sem isso o preventDefault pode não funcionar
     
 
     velocity = 0;
-    birdy = screenHeight / 2;
+    birdY = screenHeight / 2;
     currentAngle = 0;
     requestAnimationFrame(gameLoop); // inicia o loop de animação
   }
 
 function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem obstaculos, cenario e passaro moverem
-  let deltaTime = 0;
+  let deltaTime = 0; // Inicializa o valor — evita undefined no primeiro frame.
 
   if (lastTime !== 0) {
     deltaTime = (timestamp - lastTime) / 1000;
@@ -96,12 +96,15 @@ function gameLoop(timestamp) { // Começa o loop puxando as funções que fazem 
   }
   
   lastTime = timestamp;
-  
+
+  // Calcula posição da área de jogo só uma vez por frame
+  const gameBox = document.querySelector('.box');
+  const boxRect = gameBox.getBoundingClientRect();
 
   updateBird(deltaTime);
-  updateObstacles(deltaTime);
+  updateObstacles(deltaTime, boxRect);
   scenarie(deltaTime);
-  colission();
+  colission(boxRect);
 
   if (isGameRunning) { // Se o jogo estiver rodando
     gameLoopId = requestAnimationFrame(gameLoop);
@@ -155,7 +158,7 @@ function scenarie(deltaTime) {
   }
 }
 
-function updateObstacles(deltaTime) {
+function updateObstacles(deltaTime, boxRect) {
     // Controle de velocidade do objeto por score
     if (score >= 0)
       obstacleSpeed = 150
@@ -180,10 +183,8 @@ function updateObstacles(deltaTime) {
     obstacleTop.style.transform = `translate3d(${obstacleX}px, 0, 0) rotate(180deg)`;
     obstacleBottom.style.transform = `translate3d(${obstacleX}px, 0, 0)`;
 
-    const gameBox = document.querySelector('.box'); // pega só o primeiro elemento com a classe 'box'
     const obstacleRect = obstacleTop.getBoundingClientRect();
-    const boxRect = gameBox.getBoundingClientRect();
-    
+
     // Se o obstáculo passou totalmente da tela
     if (obstacleRect.right < boxRect.left) {
       score++;  // Contabiliza +1 score
@@ -211,32 +212,20 @@ function restartObject() {
     obstacleBottom.style.height = (screenHeight - alturaCano - gapSize) + "px";
   }
   
-function colission() {
+function colission(boxRect) {
   const birdRect = flapBird.getBoundingClientRect();
-  const birdLeft = birdRect.left;
-  const birdRight = birdRect.right;
-  const birdTop = birdRect.top;
-  const birdBottom = birdRect.bottom;
-  
   const obstacles = [obstacleTop, obstacleBottom];
-  
-  for (let obstacle of obstacles) {
+
+  for (const obstacle of obstacles) {
     const rect = obstacle.getBoundingClientRect();
-    const obstacleLeft = rect.left;
-    const obstacleRight = rect.right;
-    const obstacleTop = rect.top;
-    const obstacleBottom = rect.bottom;
-  
-    // Verificação de colisão (usando as bordas)
-    if (!(birdRight < obstacleLeft || 
-          birdLeft > obstacleRight || 
-          birdBottom < obstacleTop || 
-          birdTop > obstacleBottom)) {
-       createRestartButton();
-       break;
+    if (!(birdRect.right < rect.left || 
+          birdRect.left > rect.right || 
+          birdRect.bottom < rect.top || 
+          birdRect.top > rect.bottom)) {
+      createRestartButton();
+      break;
     }
   }
-  
 }
 
 function createRestartButton() {
