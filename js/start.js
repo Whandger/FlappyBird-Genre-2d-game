@@ -148,21 +148,21 @@ function scenarie(deltaTime) {
 function updateObstacles(deltaTime) {
     // Controle de velocidade do objeto por score
     if (score >= 0)
-      obstacleSpeed = 120
-    if (score >= 3)
       obstacleSpeed = 150
-    if (score >= 6)
-      obstacleSpeed = 180
-    if (score >= 10)
+    if (score >= 3)
       obstacleSpeed = 200
+    if (score >= 6)
+      obstacleSpeed = 250
+    if (score >= 10)
+      obstacleSpeed = 300
     if (score >= 15)
-      obstacleSpeed = 220
+      obstacleSpeed = 350
     if (score >= 20)
-      obstacleSpeed = 240
+      obstacleSpeed = 380
     if (score >= 30)
-      obstacleSpeed = 260
+      obstacleSpeed = 400
     if (score >= 40)
-      obstacleSpeed = 280
+      obstacleSpeed = obstacleSpeed + 0.05
 
     obstacleX -= obstacleSpeed * deltaTime;  // posição do obstaculo é igual a posião menos a velocidade vezes o delta
     
